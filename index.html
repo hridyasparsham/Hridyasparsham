@@ -7,19 +7,35 @@
     <title>Hridayasparsham</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- Include SheetJS -->
     <style>
-         body {
+        body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #121212; /* Dark background color */
+            color: #ffffff; /* Light text color */
+            position: relative;
+            overflow: hidden; /* Prevent scrolling due to image */
+        }
+        .background-image {
+            background-image: url('Background.PNG'); /* Add your background image path here */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Do not repeat the image */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.2; /* Reduced visibility (20%) */
+            z-index: -1; /* Send it to the back */
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background: white;
+            background: rgba(30, 30, 30, 0.8); /* Semi-transparent dark background for readability */
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
         .dropdown, .search-box {
             margin: 10px 0;
@@ -56,11 +72,13 @@
         }
 		.custom-font {
             font-family: unifrakturcook; /* Change font to Arial */
-            font-size: 3Sem; /* Adjust font size if needed */
+            font-size: 3em; /* Adjust font size if needed */
         }
     </style>
 </head>
 <body>
+
+<div class="background-image"></div> <!-- Background image layer -->
 
 <div class="container">
     <h1 class="centered-title custom-font">Hridayasparsham</h1>
