@@ -5,30 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hridayasparsham</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- Include SheetJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0; /* Remove padding for full background effect */
-            background-color: #121212; /* Dark background color */
-            color: #ffffff; /* Light text color */
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
             position: relative;
-            overflow: auto; /* Allow scrolling */
-            height: 100vh; /* Set height to viewport height */
+            overflow: auto;
+            height: 100vh;
         }
         .container {
             max-width: 800px;
-            margin: 20px auto; /* Add margin for spacing */
+            margin: 20px auto;
             padding: 20px;
-            background: rgba(30, 30, 30, 0.8); /* Semi-transparent dark background for readability */
+            background: rgba(30, 30, 30, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
         .dropdown, .search-box {
             margin: 10px 0;
         }
-        .dropdown select, .search-box input[type="submit"] {
+        .dropdown select, .search-box input[type="button"] {
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -36,31 +36,31 @@
             width: 100%;
             box-sizing: border-box;
         }
-        .search-box input[type="submit"] {
+        .search-box input[type="button"] {
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
         }
-        .search-box input[type="submit"]:hover {
+        .search-box input[type="button"]:hover {
             background-color: #0056b3;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            display: none; /* Initially hidden */
+            display: none;
         }
         table, th, td {
             border: 1px solid #ccc;
             padding: 10px;
         }
         .centered-title {
-            text-align: center; /* Center text within this class */
+            text-align: center;
         }
         .custom-font {
-            font-family: unifrakturcook; /* Change font to Arial */
-            font-size: 3em; /* Adjust font size if needed */
+            font-family: unifrakturcook;
+            font-size: 3em;
         }
     </style>
 </head>
@@ -70,8 +70,8 @@
     <h1 class="centered-title custom-font">Hridayasparsham</h1>
 
     <div class="dropdown">
-        <select id="options" name="options">
-            <option value="" disabled selected>Select a Blood Group</option> <!-- Default text -->
+        <select id="options" required>
+            <option value="" disabled selected>Select a Blood Group</option>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
             <option value="B+">B+</option>
@@ -81,10 +81,9 @@
             <option value="O+">O+</option>
             <option value="O-">O-</option>
         </select>
-    </div>
-
-    <div class="search-box">
-        <input type="submit" value="Search" onclick="loadExcel()">
+        <div class="search-box">
+            <input type="button" value="Search" onclick="searchBloodGroup()">
+        </div>
     </div>
 
     <!-- Table to display Excel data -->
@@ -108,9 +107,7 @@
         "O-": "path/to/O_minus.xlsx"
     };
 
-    function loadExcel() {
-        const selectedValue = document.getElementById('options').value;
-
+    function loadExcel(selectedValue) {
         if (selectedValue && excelFiles[selectedValue]) {
             fetch(excelFiles[selectedValue])
                 .then(response => response.arrayBuffer())
@@ -155,6 +152,11 @@
 
         // Show the table
         document.getElementById('excelTable').style.display = 'table';
+    }
+
+    function searchBloodGroup() {
+        const selectedValue = document.getElementById("options").value;
+        loadExcel(selectedValue);
     }
 </script>
 
