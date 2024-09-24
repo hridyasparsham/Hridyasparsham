@@ -35,7 +35,7 @@ label {
     color: #fff; /* White text */
 }
 
-input[type="text"], input[type="password"] { /* Adjusted input styles */
+input[type="email"], input[type="password"] { /* Adjusted input styles */
     width: 90%; /* Full width */
     padding: 12px; /* Padding inside the input */
     margin-bottom: 15px; /* Margin below input */
@@ -47,7 +47,7 @@ input[type="text"], input[type="password"] { /* Adjusted input styles */
     transition: border-color 0.3s ease; /* Smooth transition */
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type="email"]:focus, input[type="password"]:focus {
     border-color: #cc0000; /* Darker red on focus */
     outline: none; /* Remove default outline */
 }
