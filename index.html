@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="styles.css">
-    <script>
-        // Generate a random nonce
-        const nonce = btoa(Math.random().toString()).substring(0, 16);
-        document.write(`<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'nonce-${nonce}' https://www.gstatic.com;">`);
-    </script>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'nonce-MC45MTY1NDc3NjU0' https://www.gstatic.com;">
 </head>
 <body>
     <div class="login-container">
@@ -30,14 +26,15 @@
         </div>
     </div>
 
-    <script type="module" nonce="${nonce}">
+    <script type="module" nonce="MC45MTY1NDc3NjU0">
         // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB6IpCAFTtSbn6xFtMEinnZLqI9aWK_aVQ",
             authDomain: "hridyasparsham-75cc9.firebaseapp.com",
             projectId: "hridyasparsham-75cc9",
             storageBucket: "hridyasparsham-75cc9",
-            messagingSenderId: "519026690500"
+            messagingSenderId: "519026690500",
+            appId: "YOUR_APP_ID"
         };
 
         // Initialize Firebase
