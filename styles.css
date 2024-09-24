@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #000; /* Black background */
-    background-image: url('Background1.PNG'); /* Insert background image */
+    background-color: #000; /* Black background for dark theme */
+    background-image: url('Background1.PNG'); /* Background image */
     background-size: cover; /* Ensure the image covers the entire background */
     background-position: center; /* Center the background image */
     background-repeat: no-repeat; /* Prevent the image from repeating */
@@ -11,45 +11,57 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    position: relative; /* Needed for the loader positioning */
 }
 
 .login-container {
-    background-color: #b22222; /* Dark red background */
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(255, 0, 0, 0.5);
+    background-color: rgba(50, 50, 50, 0.9); /* Dark gray background with transparency */
+    padding: 40px; /* Padding for content */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Shadow effect */
+    max-width: 400px; /* Max width for the container */
+    width: 90%; /* Responsive width */
+    text-align: center; /* Center text */
 }
 
 h1 {
-    text-align: center;
-    color: #fff;
+    color: #ff0000; /* Red color for title */
+    font-size: 2em; /* Increased font size */
+    margin-bottom: 20px; /* Space below the title */
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
-    color: #fff;
+    margin-bottom: 8px; /* Margin below label */
+    color: #fff; /* White text */
 }
 
-input[type="password"] {
-    width: 90%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #fff; /* White border */
-    border-radius: 5px;
-    background-color: #333; /* Dark grey background */
+input[type="text"], input[type="password"] { /* Adjusted input styles */
+    width: 90%; /* Full width */
+    padding: 12px; /* Padding inside the input */
+    margin-bottom: 15px; /* Margin below input */
+    border: 2px solid #ff0000; /* Red border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #333; /* Dark input background */
     color: #fff; /* White text */
+    font-size: 1em; /* Base font size */
+    transition: border-color 0.3s ease; /* Smooth transition */
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #cc0000; /* Darker red on focus */
+    outline: none; /* Remove default outline */
 }
 
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px; /* Padding inside the button */
     background-color: #ff0000; /* Bright red */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    color: #fff; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1.1em; /* Larger button text */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 button:hover {
@@ -59,6 +71,7 @@ button:hover {
 .error {
     color: #ffcccc; /* Light red for error messages */
     text-align: center;
+    margin-top: 10px; /* Space above the error message */
 }
 
 /* Blood drop loader */

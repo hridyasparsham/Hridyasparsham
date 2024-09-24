@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js"></script>
 </head>
 <body>
     <div class="login-container">
         <h1>Login</h1>
         <form id="loginForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
             <label for="password">Password:</label>
             <input type="password" id="password" required>
             <button type="submit">Login</button>
@@ -24,19 +29,38 @@
     </div>
 
     <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6IpCAFTtSbn6xFtMEinnZLqI9aWK_aVQ",
+            authDomain: "hridyasparsham-75cc9.firebaseapp.com",
+            projectId: "hridyasparsham-75cc9",
+            storageBucket: "hridyasparsham-75cc9.appspot.com",
+            messagingSenderId: "519026690500",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             document.getElementById('loader').style.display = 'block';  // Show the loader
 
-            const password = document.getElementById('password').value;
-            setTimeout(() => {
-                if (password === 'mzmc1234') {
+            const email = document.getElementById('email').value;  // Get the email input
+            const password = document.getElementById('password').value;  // Get the password input
+
+            // Sign in with Firebase
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    // Redirect on successful login
                     window.location.href = 'main.html';
-                } else {
-                    document.getElementById('error-message').textContent = 'Incorrect password. Please try again.';
-                    document.getElementById('loader').style.display = 'none';  // Hide the loader if wrong password
-                }
-            }, 2000);  // Simulate loading for 2 seconds
+                })
+                .catch((error) => {
+                    // Display error message
+                    document.getElementById('error-message').textContent = error.message;
+                    document.getElementById('loader').style.display = 'none';  // Hide the loader
+                });
         });
     </script>
 </body>
