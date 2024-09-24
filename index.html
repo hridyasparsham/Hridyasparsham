@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="styles.css">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com;">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'nonce-<RANDOM_NONCE>' https://www.gstatic.com;">
 </head>
 <body>
     <div class="login-container">
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <script type="module">
+    <script type="module" nonce="<RANDOM_NONCE>">
         // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB6IpCAFTtSbn6xFtMEinnZLqI9aWK_aVQ",
