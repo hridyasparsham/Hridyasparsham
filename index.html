@@ -58,22 +58,11 @@
                     window.location.href = 'main.html';
                 })
                 .catch((error) => {
-                    // Display error message, escaping special characters
-                    const sanitizedMessage = escapeHtml(error.message);
-                    document.getElementById('error-message').textContent = sanitizedMessage;
+                    // Display error message without sanitization
+                    document.getElementById('error-message').textContent = error.message;
                     document.getElementById('loader').style.display = 'none';  // Hide the loader
                 });
         });
-
-        // Function to escape HTML
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
     </script>
 </body>
 </html>
