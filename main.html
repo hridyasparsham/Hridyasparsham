@@ -15,14 +15,20 @@
             margin: 0;
             padding: 0;
             background-color: #121212;
-            background-image: url('Background1.PNG');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
             color: #ffffff;
             position: relative;
             overflow: auto;
             height: 100vh;
+        }
+        /* Video background */
+        #videoBackground {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1; /* Place video behind other content */
         }
         .container {
             max-width: 800px;
@@ -77,6 +83,11 @@
 </head>
 <body>
 
+<video id="videoBackground" autoplay muted loop>
+    <source src="Back.mp4" type="video/mp4"> <!-- Replace with your video file -->
+    Your browser does not support the video tag.
+</video>
+
 <div class="container">
     <h1 class="centered-title custom-font">Hridayasparsham</h1>
 
@@ -109,6 +120,18 @@
 </div>
 
 <script>
+    // Excel files
+    const excelFiles = {
+        "A+": "APositive.xlsx",
+        "A-": "ANegative.xlsx",
+        "B+": "BPositive.xlsx",
+        "B-": "path/to/B_minus.xlsx",
+        "AB+": "path/to/AB_plus.xlsx",
+        "AB-": "path/to/AB_minus.xlsx",
+        "O+": "path/to/O_plus.xlsx",
+        "O-": "path/to/O_minus.xlsx"
+    };
+
     // Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
@@ -130,18 +153,6 @@
             window.location.href = "index.html"; // Replace with your login page URL
         }
     });
-
-    // Excel files
-    const excelFiles = {
-        "A+": "APositive.xlsx",
-        "A-": "ANegative.xlsx",
-        "B+": "BPositive.xlsx",
-        "B-": "path/to/B_minus.xlsx",
-        "AB+": "path/to/AB_plus.xlsx",
-        "AB-": "path/to/AB_minus.xlsx",
-        "O+": "path/to/O_plus.xlsx",
-        "O-": "path/to/O_minus.xlsx"
-    };
 
     function loadExcel(selectedValue) {
         const filePath = excelFiles[selectedValue];
