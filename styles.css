@@ -1,11 +1,11 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #000; /* Black background for dark theme */
-    background-image: url('Background1.PNG'); /* Background image */
-    background-size: cover; /* Ensure the image covers the entire background */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Prevent the image from repeating */
-    color: #fff; /* White text for contrast */
+    background-color: #f0f0f0; /* Light gray background */
+    background-image: url('Background1.PNG'); /* Keeping the background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #333; /* Dark text for contrast */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,69 +14,69 @@ body {
 }
 
 .login-container {
-    background-color: rgba(50, 50, 50, 0.9); /* Dark gray background with transparency */
-    padding: 40px; /* Padding for content */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Shadow effect */
-    max-width: 400px; /* Max width for the container */
-    width: 90%; /* Responsive width */
-    text-align: center; /* Center text */
+    background-color: rgba(255, 255, 255, 0.9); /* Light white background with transparency */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
 }
 
 h1 {
-    color: #ff0000; /* Red color for title */
-    font-size: 2em; /* Increased font size */
-    margin-bottom: 20px; /* Space below the title */
+    color: #333; /* Dark color for title */
+    font-size: 2em;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
-    margin-bottom: 8px; /* Margin below label */
-    color: #fff; /* White text */
+    margin-bottom: 8px;
+    color: #333; /* Dark text */
 }
 
-input[type="email"], input[type="password"] { /* Adjusted input styles */
-    width: 90%; /* Full width */
-    padding: 12px; /* Padding inside the input */
-    margin-bottom: 15px; /* Margin below input */
-    border: 2px solid #ff0000; /* Red border */
-    border-radius: 5px; /* Rounded corners */
-    background-color: #333; /* Dark input background */
-    color: #fff; /* White text */
-    font-size: 1em; /* Base font size */
-    transition: border-color 0.3s ease; /* Smooth transition */
+input[type="email"], input[type="password"] {
+    width: 90%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #ccc; /* Light border */
+    border-radius: 5px;
+    background-color: #fff; /* White background */
+    color: #333; /* Dark text */
+    font-size: 1em;
+    transition: border-color 0.3s ease;
 }
 
 input[type="email"]:focus, input[type="password"]:focus {
-    border-color: #cc0000; /* Darker red on focus */
-    outline: none; /* Remove default outline */
+    border-color: #666; /* Darker gray on focus */
+    outline: none;
 }
 
 button {
     width: 100%;
-    padding: 12px; /* Padding inside the button */
-    background-color: #ff0000; /* Bright red */
+    padding: 12px;
+    background-color: #007bff; /* Blue button */
     color: #fff; /* White text */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 1.1em; /* Larger button text */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.3s ease; /* Smooth transition */
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #cc0000; /* Darker red on hover */
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
 .error {
-    color: #ffcccc; /* Light red for error messages */
+    color: #ff6666; /* Light red for error messages */
     text-align: center;
-    margin-top: 10px; /* Space above the error message */
+    margin-top: 10px;
 }
 
-/* Blood drop loader */
+/* Blood drop loader (adjusted to lighter theme) */
 .loader {
-    display: none; /* Hidden initially */
+    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -89,7 +89,7 @@ button:hover {
 .drop {
     width: 20px;
     height: 30px;
-    background-color: red;
+    background-color: #007bff; /* Blue drop */
     border-radius: 50% 50% 50% 50% / 60% 60% 100% 100%;
     animation: drop 1s infinite ease-in;
     position: absolute;
@@ -104,7 +104,7 @@ button:hover {
     left: 50%;
     width: 10px;
     height: 5px;
-    background-color: rgba(255, 0, 0, 0.5);
+    background-color: rgba(0, 123, 255, 0.5); /* Lighter blue ripples */
     border-radius: 50%;
     transform: translate(-50%, -50%);
     animation: ripple 1s infinite ease-out;

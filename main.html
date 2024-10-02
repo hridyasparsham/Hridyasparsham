@@ -12,10 +12,10 @@
             margin: 0;
             padding: 0;
             background-color: #121212;
-            background-image: url('Background1.PNG'); /* Background image added */
-            background-size: cover; /* Ensures the image covers the entire background */
-            background-position: center; /* Centers the background image */
-            background-repeat: no-repeat; /* Prevents image from repeating */
+            background-image: url('Background1.PNG');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: #ffffff;
             position: relative;
             overflow: auto;
@@ -90,7 +90,6 @@
         </div>
     </div>
 
-    <!-- Table to display Excel data -->
     <table id="excelTable">
         <thead>
             <tr></tr>
@@ -99,7 +98,20 @@
     </table>
 </div>
 
-<script>
+<script type="module">
+    // Firebase Authentication check
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js';
+
+    const auth = getAuth();
+
+    // Check if the user is authenticated
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            // Redirect to login page if not authenticated
+            window.location.href = 'login.html';
+        }
+    });
+
     const excelFiles = {
         "A+": "APositive.xlsx",
         "A-": "ANegative.xlsx",
@@ -131,11 +143,9 @@
         const tableHeader = document.querySelector("#excelTable thead tr");
         const tableBody = document.querySelector("#excelTable tbody");
 
-        // Clear previous table data
         tableHeader.innerHTML = '';
         tableBody.innerHTML = '';
 
-        // Fill in the table header (first row)
         const headers = data[0];
         headers.forEach(header => {
             const th = document.createElement('th');
@@ -143,7 +153,6 @@
             tableHeader.appendChild(th);
         });
 
-        // Fill in the table body (remaining rows)
         for (let i = 1; i < data.length; i++) {
             const row = document.createElement('tr');
             data[i].forEach(cell => {
@@ -154,7 +163,6 @@
             tableBody.appendChild(row);
         }
 
-        // Show the table
         document.getElementById('excelTable').style.display = 'table';
     }
 
