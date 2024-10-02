@@ -5,6 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hridayasparsham</title>
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
+            authDomain: "hridyasparsham-75cc9.firebaseapp.com",
+            projectId: "hridyasparsham-75cc9",
+            storageBucket: "hridyasparsham-75cc9",
+            messagingSenderId: "519026690500",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Check if the user is authenticated
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // User is not authenticated, redirect to login page
+                window.location.href = "index.html"; // Replace with your login page URL
+            }
+        });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <style>
         body {
@@ -90,6 +118,7 @@
         </div>
     </div>
 
+    <!-- Table to display Excel data -->
     <table id="excelTable">
         <thead>
             <tr></tr>
@@ -98,20 +127,8 @@
     </table>
 </div>
 
-<script type="module">
-    // Firebase Authentication check
-    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js';
-
-    const auth = getAuth();
-
-    // Check if the user is authenticated
-    onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            // Redirect to login page if not authenticated
-            window.location.href = 'login.html';
-        }
-    });
-
+<script>
+    // Excel files
     const excelFiles = {
         "A+": "APositive.xlsx",
         "A-": "ANegative.xlsx",
@@ -143,9 +160,11 @@
         const tableHeader = document.querySelector("#excelTable thead tr");
         const tableBody = document.querySelector("#excelTable tbody");
 
+        // Clear previous table data
         tableHeader.innerHTML = '';
         tableBody.innerHTML = '';
 
+        // Fill in the table header (first row)
         const headers = data[0];
         headers.forEach(header => {
             const th = document.createElement('th');
@@ -153,6 +172,7 @@
             tableHeader.appendChild(th);
         });
 
+        // Fill in the table body (remaining rows)
         for (let i = 1; i < data.length; i++) {
             const row = document.createElement('tr');
             data[i].forEach(cell => {
@@ -163,6 +183,7 @@
             tableBody.appendChild(row);
         }
 
+        // Show the table
         document.getElementById('excelTable').style.display = 'table';
     }
 
