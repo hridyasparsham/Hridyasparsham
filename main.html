@@ -6,33 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hridayasparsham</title>
     <!-- Firebase SDKs -->
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-        
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
-            authDomain: "hridyasparsham-75cc9.firebaseapp.com",
-            projectId: "hridyasparsham-75cc9",
-            storageBucket: "hridyasparsham-75cc9",
-            messagingSenderId: "519026690500",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // Check if the user is authenticated
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                // User is not authenticated, redirect to login page
-                window.location.href = "index.html"; // Replace with your login page URL
-            }
-        });
-    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <style>
         body {
@@ -94,6 +69,10 @@
             font-family: unifrakturcook;
             font-size: 3em;
         }
+        .error {
+            color: red;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -118,6 +97,8 @@
         </div>
     </div>
 
+    <div id="errorMessage" class="error"></div>
+
     <!-- Table to display Excel data -->
     <table id="excelTable">
         <thead>
@@ -128,6 +109,28 @@
 </div>
 
 <script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
+        authDomain: "hridyasparsham-75cc9.firebaseapp.com",
+        projectId: "hridyasparsham-75cc9",
+        storageBucket: "hridyasparsham-75cc9",
+        messagingSenderId: "519026690500",
+        appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Check if the user is authenticated
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            // User is not authenticated, redirect to login page
+            window.location.href = "index.html"; // Replace with your login page URL
+        }
+    });
+
     // Excel files
     const excelFiles = {
         "A+": "APositive.xlsx",
@@ -141,18 +144,29 @@
     };
 
     function loadExcel(selectedValue) {
-        if (selectedValue && excelFiles[selectedValue]) {
-            fetch(excelFiles[selectedValue])
-                .then(response => response.arrayBuffer())
+        const filePath = excelFiles[selectedValue];
+
+        if (filePath) {
+            fetch(filePath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to load file: ${response.statusText}`);
+                    }
+                    return response.arrayBuffer();
+                })
                 .then(data => {
                     const workbook = XLSX.read(data, { type: 'array' });
                     const sheetName = workbook.SheetNames[0];
                     const sheet = workbook.Sheets[sheetName];
                     const excelData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
                     displayTable(excelData);
                 })
-                .catch(err => console.error('Error loading Excel file:', err));
+                .catch(err => {
+                    console.error('Error loading Excel file:', err);
+                    document.getElementById('errorMessage').innerText = 'Error loading data. Please try again later.';
+                });
+        } else {
+            document.getElementById('errorMessage').innerText = 'Invalid blood group selected.';
         }
     }
 
