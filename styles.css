@@ -99,7 +99,7 @@ button:hover {
 .drop {
     width: 20px;
     height: 30px;
-    background-color: #007bff; /* Blue drop */
+    background-color: #bb0a1e; /* Red drop */
     border-radius: 50% 50% 50% 50% / 60% 60% 100% 100%;
     animation: drop 1s infinite ease-in;
     position: absolute;
@@ -114,7 +114,7 @@ button:hover {
     left: 50%;
     width: 10px;
     height: 5px;
-    background-color: rgba(120, 6, 6, 1.0); /* Lighter red ripples */
+    background-color: rgba(120, 6, 6, 0.8); /* Lighter red ripples */
     border-radius: 50%;
     transform: translate(-50%, -50%);
     animation: ripple 1s infinite ease-out;
