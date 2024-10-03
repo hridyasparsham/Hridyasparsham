@@ -11,16 +11,18 @@ body {
     position: relative;
 }
 
-video {
-    position: fixed; /* Positions the video in the background */
+/* Background Image */
+.background-image {
+    position: fixed;
     top: 50%;
     left: 50%;
     min-width: 100%;
     min-height: 100%;
-    width: auto; /* Maintain aspect ratio */
-    height: auto; /* Maintain aspect ratio */
-    z-index: -1; /* Places video behind content */
-    transform: translate(-50%, -50%); /* Centers the video */
+    width: auto;
+    height: auto;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    object-fit: cover; /* Ensures the image covers the entire background */
 }
 
 .login-container {
@@ -88,59 +90,4 @@ button:hover {
 .loader {
     display: none;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100px;
-    height: 100px;
-    z-index: 1000;
-}
-
-.drop {
-    width: 20px;
-    height: 30px;
-    background-color: #bb0a1e; /* Red drop */
-    border-radius: 50% 50% 50% 50% / 60% 60% 100% 100%;
-    animation: drop 1s infinite ease-in;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.ripples {
-    position: absolute;
-    top: 75%;
-    left: 50%;
-    width: 10px;
-    height: 5px;
-    background-color: rgba(120, 6, 6, 0.8); /* Lighter red ripples */
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    animation: ripple 1s infinite ease-out;
-}
-
-@keyframes drop {
-    0% {
-        height: 30px;
-    }
-    50% {
-        height: 60px;
-    }
-    100% {
-        height: 30px;
-    }
-}
-
-@keyframes ripple {
-    0% {
-        width: 10px;
-        height: 5px;
-        opacity: 1;
-    }
-    100% {
-        width: 50px;
-        height: 25px;
-        opacity: 0;
-    }
-}
+    top: 
