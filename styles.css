@@ -2,12 +2,12 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    color: #333; /* Dark text for contrast */
+    color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    overflow: hidden; /* Prevents scrolling */
+    overflow: hidden;
     position: relative;
 }
 
@@ -22,21 +22,21 @@ body {
     height: auto;
     z-index: -1;
     transform: translate(-50%, -50%);
-    object-fit: cover; /* Ensures the image covers the entire background */
+    object-fit: cover;
 }
 
 .login-container {
-    background-color: rgba(255, 255, 255, 0.9); /* Light white background with transparency */
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 90%;
     text-align: center;
 }
 
 h1 {
-    color: #333; /* Dark color for title */
+    color: #333;
     font-size: 2em;
     margin-bottom: 20px;
 }
@@ -44,31 +44,31 @@ h1 {
 label {
     display: block;
     margin-bottom: 8px;
-    color: #333; /* Dark text */
+    color: #333;
 }
 
 input[type="email"], input[type="password"] {
     width: 90%;
     padding: 12px;
     margin-bottom: 15px;
-    border: 2px solid #ccc; /* Light border */
+    border: 2px solid #ccc;
     border-radius: 5px;
-    background-color: #fff; /* White background */
-    color: #333; /* Dark text */
+    background-color: #fff;
+    color: #333;
     font-size: 1em;
     transition: border-color 0.3s ease;
 }
 
 input[type="email"]:focus, input[type="password"]:focus {
-    border-color: #666; /* Darker gray on focus */
+    border-color: #666;
     outline: none;
 }
 
 button {
     width: 100%;
     padding: 12px;
-    background-color: #007bff; /* Blue button */
-    color: #fff; /* White text */
+    background-color: #007bff;
+    color: #fff;
     border: none;
     border-radius: 5px;
     font-size: 1.1em;
@@ -77,17 +77,108 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
 }
 
 .error {
-    color: #ff6666; /* Light red for error messages */
+    color: #ff6666;
     text-align: center;
     margin-top: 10px;
 }
 
-/* Blood drop loader (adjusted to lighter theme) */
+/* Blood drop loader */
 .loader {
     display: none;
     position: absolute;
-    top: 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    z-index: 1000;
+}
+
+.drop {
+    width: 20px;
+    height: 30px;
+    background-color: #bb0a1e;
+    border-radius: 50% 50% 50% 50% / 60% 60% 100% 100%;
+    animation: drop 1s infinite ease-in;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ripples {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    width: 10px;
+    height: 5px;
+    background-color: rgba(120, 6, 6, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: ripple 1s infinite ease-out;
+}
+
+@keyframes drop {
+    0% {
+        height: 30px;
+    }
+    50% {
+        height: 60px;
+    }
+    100% {
+        height: 30px;
+    }
+}
+
+@keyframes ripple {
+    0% {
+        width: 10px;
+        height: 5px;
+        opacity: 1;
+    }
+    100% {
+        width: 50px;
+        height: 25px;
+        opacity: 0;
+    }
+}
+
+/* Media Queries for Mobile Optimization */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    input[type="email"], input[type="password"], button {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.2em;
+    }
+
+    input[type="email"], input[type="password"], button {
+        font-size: 0.8em;
+        padding: 8px;
+    }
+
+    .background-image {
+        object-fit: contain; /* Ensure the image is properly displayed on smaller screens */
+    }
+}
