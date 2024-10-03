@@ -21,19 +21,19 @@
             height: 100vh;
         }
 
-        /* Image background */
-        #imageBackground {
+        /* Background image */
+        #backgroundImage {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -1; /* Place image behind other content */
+            z-index: -1; /* Place background image behind other content */
         }
 
         .container {
-            max-width: 90%; /* Adjusted for mobile responsiveness */
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             background: rgba(30, 30, 30, 0.8);
@@ -46,8 +46,8 @@
         }
 
         .dropdown select, .search-box input[type="button"] {
-            padding: 12px; /* Increased padding for touch devices */
-            font-size: 1rem;
+            padding: 10px;
+            font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 4px;
             width: 100%;
@@ -59,7 +59,6 @@
             color: white;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
         .search-box input[type="button"]:hover {
@@ -71,59 +70,31 @@
             border-collapse: collapse;
             margin-top: 20px;
             display: none;
-            overflow-x: auto; /* Make table scrollable on small screens */
         }
 
         table, th, td {
             border: 1px solid #ccc;
             padding: 10px;
-            text-align: left;
         }
 
         .centered-title {
             text-align: center;
-            font-size: 2rem; /* Responsive font size */
         }
 
         .custom-font {
             font-family: unifrakturcook;
-            font-size: 2.5rem;
+            font-size: 3em;
         }
 
         .error {
             color: red;
             text-align: center;
         }
-
-        /* Media queries for mobile responsiveness */
-        @media only screen and (max-width: 600px) {
-            body {
-                font-size: 0.9rem;
-            }
-
-            .container {
-                padding: 15px;
-                margin: 10px auto;
-            }
-
-            .centered-title {
-                font-size: 1.8rem;
-            }
-
-            .custom-font {
-                font-size: 2rem;
-            }
-
-            table, th, td {
-                padding: 8px;
-            }
-        }
-
     </style>
 </head>
 <body>
 
-<img id="imageBackground" src="Background.PNG" alt="Background Image"> <!-- Replace with your image -->
+<img id="backgroundImage" src="Background.PNG" alt="Background Image"> <!-- Updated to use an image -->
 
 <div class="container">
     <h1 class="centered-title custom-font">Hridayasparsham</h1>
@@ -239,7 +210,18 @@
             const row = document.createElement('tr');
             data[i].forEach(cell => {
                 const td = document.createElement('td');
-                td.innerText = cell;
+
+                // Check if the cell contains a phone number (modify this logic based on your actual data)
+                if (/^\d{10}$/.test(cell)) { // Example: assuming phone numbers are 10 digits
+                    const phoneLink = document.createElement('a');
+                    phoneLink.href = `tel:${cell}`; // Create a tel link
+                    phoneLink.innerText = cell; // Display the phone number
+                    phoneLink.style.color = "#FFFFFF"; // Optional: Add styles to the link
+                    td.appendChild(phoneLink);
+                } else {
+                    td.innerText = cell; // Regular text for other cells
+                }
+
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
