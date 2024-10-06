@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Record</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(30, 30, 30, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="email"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Add Record</h1>
+    <form id="recordForm">
+        <label for="name">Name</label>
+        <input type="text" id="name" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" required>
+
+        <label for="bloodGroup">Blood Group</label>
+        <select id="bloodGroup" required>
+            <option value="" disabled selected>Select a Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+    <div id="message"></div>
+</div>
+
+<script>
+    document.getElementById('recordForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Get form data
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const bloodGroup = document.getElementById('bloodGroup').value;
+
+        // Prepare data for submission (you'll send this data to your backend)
+        const data = {
+            name,
+            phone,
+            bloodGroup
+        };
+
+        // Example: sending data to your backend using fetch (update the URL)
+        fetch('YOUR_BACKEND_URL_HERE', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            document.getElementById('message').innerText = 'Record added successfully!';
+            // Optionally reset the form
+            document.getElementById('recordForm').reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('message').innerText = 'Failed to add record.';
+        });
+    });
+</script>
+
+</body>
+</html>
