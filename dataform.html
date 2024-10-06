@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Record</title>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,6 +18,18 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            position: relative;
+        }
+
+        /* Background image */
+        #backgroundImage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1; /* Place background image behind other content */
         }
 
         .container {
@@ -25,6 +39,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             width: 100%;
             max-width: 500px;
+            position: relative; /* Position relative to contain the absolute elements */
         }
 
         label {
@@ -32,7 +47,7 @@
             margin-bottom: 5px;
         }
 
-        input[type="text"], input[type="email"], select {
+        input[type="text"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -56,6 +71,8 @@
     </style>
 </head>
 <body>
+
+<img id="backgroundImage" src="Background.PNG" alt="Background Image">
 
 <div class="container">
     <h1>Add Record</h1>
@@ -85,6 +102,20 @@
 </div>
 
 <script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
+        authDomain: "hridyasparsham-75cc9.firebaseapp.com",
+        projectId: "hridyasparsham-75cc9",
+        storageBucket: "hridyasparsham-75cc9",
+        messagingSenderId: "519026690500",
+        appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     document.getElementById('recordForm').addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -93,29 +124,23 @@
         const phone = document.getElementById('phone').value;
         const bloodGroup = document.getElementById('bloodGroup').value;
 
-        // Prepare data for submission (you'll send this data to your backend)
+        // Prepare data for Firestore
         const data = {
             name,
             phone,
-            bloodGroup
+            bloodGroup,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         };
 
-        // Example: sending data to your backend using fetch (update the URL)
-        fetch('YOUR_BACKEND_URL_HERE', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(result => {
+        // Add record to Firestore
+        db.collection(bloodGroup).add(data)
+        .then(() => {
             document.getElementById('message').innerText = 'Record added successfully!';
             // Optionally reset the form
             document.getElementById('recordForm').reset();
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error adding record:', error);
             document.getElementById('message').innerText = 'Failed to add record.';
         });
     });
