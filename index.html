@@ -6,6 +6,15 @@
     <title>Login</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico"> <!-- Replace with your favicon file -->
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6YVNTM6JD7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6YVNTM6JD7');
+    </script>
 </head>
 <body>
     <!-- Background Image -->
@@ -31,15 +40,8 @@
     </div>
 
     <script type="module">
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
-            authDomain: "hridyasparsham-75cc9.firebaseapp.com",
-            projectId: "hridyasparsham-75cc9",
-            storageBucket: "hridyasparsham-75cc9",
-            messagingSenderId: "519026690500",
-            appId: "YOUR_APP_ID"
-        };
+        // Importing Firebase configuration from config.js
+        import { firebaseConfig } from './config.js';
 
         // Initialize Firebase
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js';
