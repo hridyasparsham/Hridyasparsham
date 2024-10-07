@@ -25,7 +25,7 @@
         gtag('config', 'G-6YVNTM6JD7');
     </script>
 
-<style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -162,9 +162,6 @@
     </table>
 </div>
 
-<!-- Include the configuration file -->
-<script src="config.js"></script>
-
 <script>
     const excelFiles = {
         "A+": "APositive.xlsx",
@@ -177,14 +174,33 @@
         "O-": "ONegative.xlsx"
     };
 
-    const app = firebase.initializeApp(window.firebaseConfig);
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
+        authDomain: "hridyasparsham-75cc9.firebaseapp.com",
+        projectId: "hridyasparsham-75cc9",
+        storageBucket: "hridyasparsham-75cc9",
+        messagingSenderId: "519026690500",
+        appId: "YOUR_APP_ID"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
     auth.onAuthStateChanged((user) => {
         if (!user) {
+            localStorage.removeItem('isLoggedIn'); // Clear any stored session
             window.location.href = "index.html"; // Redirect to login page if not authenticated
+        } else {
+            localStorage.setItem('isLoggedIn', 'true'); // Set session on successful login
         }
     });
+
+    // Check for manual URL entry
+    window.onload = function() {
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = "index.html"; // Redirect if not logged in
+        }
+    };
 
     function loadExcel(selectedValue) {
         const filePath = excelFiles[selectedValue];
