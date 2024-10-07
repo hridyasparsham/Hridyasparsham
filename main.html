@@ -56,6 +56,7 @@
             font-family: "Chilanka", cursive;
             font-weight: 400;
             font-style: normal;
+            font-size: 4em; /* Increased font size */
         }
 
         .dropdown, .search-box {
@@ -99,18 +100,14 @@
             text-align: center;
         }
 
-        .custom-font {
-            font-size: 4em;
-        }
-
         .error {
             color: red;
             text-align: center;
         }
 
         @media (max-width: 600px) {
-            .custom-font {
-                font-size: 2em;
+            .chilanka-regular {
+                font-size: 2em; /* Smaller font for mobile */
             }
             .dropdown select, .search-box input[type="button"] {
                 font-size: 14px;
@@ -126,7 +123,7 @@
 <img id="backgroundImage" src="Background.PNG" alt="Background Image">
 
 <div class="container">
-    <h1 class="centered-title custom-font chilanka-regular">ഹൃദയസ്പർശം</h1>
+    <h1 class="centered-title chilanka-regular">ഹൃദയസ്പർശം</h1>
 
     <div class="dropdown">
         <select id="options" required>
@@ -182,7 +179,7 @@
 
     auth.onAuthStateChanged((user) => {
         if (!user) {
-            window.location.href = "index.html";
+            window.location.href = "index.html"; // Redirect to login page if not authenticated
         }
     });
 
