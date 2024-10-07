@@ -5,10 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hridayasparsham</title>
+
+    <!-- Google Fonts Embed for Chilanka -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,13 +25,12 @@
             color: #ffffff;
             position: relative;
             overflow: auto;
-            height: auto; /* Changed to auto for better mobile handling */
-            display: flex; /* Added flex for centering */
-            flex-direction: column; /* Vertical stacking */
-            align-items: center; /* Centering content */
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Background image */
         #backgroundImage {
             position: fixed;
             top: 0;
@@ -32,17 +38,24 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -1; /* Place background image behind other content */
+            z-index: -1;
         }
 
         .container {
-            width: 90%; /* Responsive width */
+            width: 90%;
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             background: rgba(30, 30, 30, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Chilanka font applied to the h1 heading */
+        .chilanka-regular {
+            font-family: "Chilanka", cursive;
+            font-weight: 400;
+            font-style: normal;
         }
 
         .dropdown, .search-box {
@@ -59,14 +72,14 @@
         }
 
         .search-box input[type="button"] {
-            background-color: #007bff;
+            background-color: #DC2324;
             color: white;
             border: none;
             cursor: pointer;
         }
 
         .search-box input[type="button"]:hover {
-            background-color: #0056b3;
+            background-color: #DC2324;
         }
 
         table {
@@ -79,7 +92,7 @@
         table, th, td {
             border: 1px solid #ccc;
             padding: 10px;
-            text-align: center; /* Centered text for better readability */
+            text-align: center;
         }
 
         .centered-title {
@@ -87,7 +100,6 @@
         }
 
         .custom-font {
-            font-family: unifrakturcook;
             font-size: 3em;
         }
 
@@ -98,23 +110,23 @@
 
         @media (max-width: 600px) {
             .custom-font {
-                font-size: 2em; /* Smaller font for mobile */
+                font-size: 2em;
             }
             .dropdown select, .search-box input[type="button"] {
-                font-size: 14px; /* Smaller font for mobile */
+                font-size: 14px;
             }
             table, th, td {
-                padding: 8px; /* Reduced padding for mobile */
+                padding: 8px;
             }
         }
     </style>
 </head>
 <body>
 
-<img id="backgroundImage" src="Background.PNG" alt="Background Image"> <!-- Updated to use an image -->
+<img id="backgroundImage" src="Background.PNG" alt="Background Image">
 
 <div class="container">
-    <h1 class="centered-title custom-font">Hridayasparsham</h1>
+    <h1 class="centered-title custom-font chilanka-regular">ഹൃദയസ്പർശം</h1>
 
     <div class="dropdown">
         <select id="options" required>
@@ -145,7 +157,6 @@
 </div>
 
 <script>
-    // Excel files
     const excelFiles = {
         "A+": "APositive.xlsx",
         "A-": "ANegative.xlsx",
@@ -157,7 +168,6 @@
         "O-": "ONegative.xlsx"
     };
 
-    // Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
         authDomain: "hridyasparsham-75cc9.firebaseapp.com",
@@ -167,15 +177,12 @@
         appId: "YOUR_APP_ID"
     };
 
-    // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // Check if the user is authenticated
     auth.onAuthStateChanged((user) => {
         if (!user) {
-            // User is not authenticated, redirect to login page
-            window.location.href = "index.html"; // Replace with your login page URL
+            window.location.href = "index.html";
         }
     });
 
@@ -210,11 +217,9 @@
         const tableHeader = document.querySelector("#excelTable thead tr");
         const tableBody = document.querySelector("#excelTable tbody");
 
-        // Clear previous table data
         tableHeader.innerHTML = '';
         tableBody.innerHTML = '';
 
-        // Fill in the table header (first row)
         const headers = data[0];
         headers.forEach(header => {
             const th = document.createElement('th');
@@ -222,30 +227,25 @@
             tableHeader.appendChild(th);
         });
 
-        // Fill in the table body (remaining rows)
         for (let i = 1; i < data.length; i++) {
             const row = document.createElement('tr');
             data[i].forEach(cell => {
                 const td = document.createElement('td');
-
-                // Check if the cell contains a phone number (modify this logic based on your actual data)
-                if (/^\d{10}$/.test(cell)) { // Example: assuming phone numbers are 10 digits
+                if (/^\d{10}$/.test(cell)) {
                     const phoneLink = document.createElement('a');
-                    phoneLink.href = `tel:${cell}`; // Create a tel link
-                    phoneLink.innerText = cell; // Display the phone number
-                    phoneLink.style.color = "#FFFFFF"; // Optional: Add styles to the link
-                    phoneLink.style.textDecoration = "none"; // Optional: Remove underline
+                    phoneLink.href = `tel:${cell}`;
+                    phoneLink.innerText = cell;
+                    phoneLink.style.color = "#FFFFFF";
+                    phoneLink.style.textDecoration = "none";
                     td.appendChild(phoneLink);
                 } else {
-                    td.innerText = cell; // Regular text for other cells
+                    td.innerText = cell;
                 }
-
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
         }
 
-        // Show the table
         document.getElementById('excelTable').style.display = 'table';
     }
 
