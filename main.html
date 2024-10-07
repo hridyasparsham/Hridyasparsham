@@ -51,7 +51,6 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* Chilanka font applied to the h1 heading */
         .chilanka-regular {
             font-family: "Chilanka", cursive;
             font-weight: 400;
@@ -179,9 +178,19 @@
 
     auth.onAuthStateChanged((user) => {
         if (!user) {
+            localStorage.removeItem('isLoggedIn'); // Clear any stored session
             window.location.href = "index.html"; // Redirect to login page if not authenticated
+        } else {
+            localStorage.setItem('isLoggedIn', 'true'); // Set session on successful login
         }
     });
+
+    // Check for manual URL entry
+    window.onload = function() {
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = "index.html"; // Redirect if not logged in
+        }
+    };
 
     function loadExcel(selectedValue) {
         const filePath = excelFiles[selectedValue];
