@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Record</title>
+    <title>Add New Donor</title>
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js"></script>
     <style>
@@ -36,10 +35,14 @@
             background: rgba(30, 30, 30, 0.8);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
             width: 100%;
             max-width: 500px;
-            position: relative; /* Position relative to contain the absolute elements */
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
         }
 
         label {
@@ -47,21 +50,19 @@
             margin-bottom: 5px;
         }
 
-        input[type="text"], select {
-            width: 100%;
+        input[type="text"], select, button {
+            width: 100%; /* Ensures all elements take up the full container width */
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box; /* Ensures padding is included within the width */
         }
 
         button {
-            width: 100%;
-            padding: 10px;
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
         }
 
@@ -75,13 +76,16 @@
 <img id="backgroundImage" src="Background.PNG" alt="Background Image">
 
 <div class="container">
-    <h1>Add Record</h1>
-    <form id="recordForm">
+    <h1>Add New Donor</h1>
+    <form id="recordForm" method="POST" action="https://gamerzodiac.pythonanywhere.com/submit_record">
         <label for="name">Name</label>
         <input type="text" id="name" required>
 
         <label for="phone">Phone Number</label>
         <input type="text" id="phone" required>
+
+        <label for="batch">Batch/Place</label>
+        <input type="text" id="batch" required>
 
         <label for="bloodGroup">Blood Group</label>
         <select id="bloodGroup" required>
@@ -104,10 +108,10 @@
 <script>
     // Firebase configuration
     const firebaseConfig = {
-        apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
+        apiKey: "YOUR_API_KEY",
         authDomain: "hridyasparsham-75cc9.firebaseapp.com",
         projectId: "hridyasparsham-75cc9",
-        storageBucket: "hridyasparsham-75cc9",
+        storageBucket: "hridyasparsham-75cc9.appspot.com",
         messagingSenderId: "519026690500",
         appId: "YOUR_APP_ID"
     };
@@ -122,12 +126,14 @@
         // Get form data
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
+        const batch = document.getElementById('batch').value;
         const bloodGroup = document.getElementById('bloodGroup').value;
 
         // Prepare data for Firestore
         const data = {
             name,
             phone,
+            batch,
             bloodGroup,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         };

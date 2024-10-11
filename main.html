@@ -32,12 +32,11 @@
             padding: 0;
             background-color: #121212;
             color: #ffffff;
-            position: relative;
-            overflow: auto;
-            height: auto;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center; /* Center main container */
+            align-items: flex-start; /* Align items at the top */
+            height: 100vh; /* Full height */
+            overflow: hidden; /* Hide overflow */
         }
 
         #backgroundImage {
@@ -51,13 +50,29 @@
         }
 
         .container {
-            width: 90%;
+            width: 70%; /* Width of the main content */
             max-width: 800px;
-            margin: 20px auto;
+            margin: 20px;
+			margin-right: 70px;
             padding: 20px;
             background: rgba(30, 30, 30, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed; /* Fixed position for the sidebar */
+            right: 20px; /* Distance from the right edge */
+            top: 20px; /* Distance from the top edge */
+            width: 15%; /* Width of the sidebar */
+            max-width: 300px; /* Maximum width */
+            padding: 20px;
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            height: calc(100% - 40px); /* Full height minus padding */
+            overflow-y: auto; /* Enable vertical scrolling if content overflows */
         }
 
         /* Chilanka font applied to the h1 heading */
@@ -114,6 +129,11 @@
             text-align: center;
         }
 
+        /* News feed styles */
+        .news-feed {
+            margin-top: 20px;
+        }
+
         @media (max-width: 600px) {
             .chilanka-regular {
                 font-size: 2em; /* Smaller font for mobile */
@@ -123,6 +143,13 @@
             }
             table, th, td {
                 padding: 8px;
+            }
+            .sidebar {
+                width: 100%; /* Full width for mobile */
+                margin: 0;
+                padding: 10px;
+                position: relative; /* Change to relative for mobile */
+                height: auto; /* Reset height */
             }
         }
     </style>
@@ -160,6 +187,18 @@
         </thead>
         <tbody></tbody>
     </table>
+</div>
+
+<div class="sidebar">
+    <button onclick="window.location.href='dataform.html'" style="width: 100%; padding: 10px; background-color: #DC2324; color: white; border: none; border-radius: 4px; cursor: pointer;">Add New Donor</button>
+    
+    <div class="news-feed">
+        <h2 align="center">News Feed</h2>
+        <p>Stay updated with the latest information!</p>
+        <ul>
+           
+        </ul>
+    </div>
 </div>
 
 <script>
@@ -214,14 +253,12 @@
                     return response.arrayBuffer();
                 })
                 .then(data => {
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheetName = workbook.SheetNames[0];
-                    const sheet = workbook.Sheets[sheetName];
-                    const excelData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                    displayTable(excelData);
+                    const workbook = XLSX.read(data);
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                    displayTable(jsonData);
                 })
-                .catch(err => {
-                    console.error('Error loading Excel file:', err);
+                .catch(error => {
                     document.getElementById('errorMessage').innerText = 'Error loading data. Please try again later.';
                 });
         } else {
