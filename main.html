@@ -11,19 +11,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
+    <!-- Firebase SDKs (compat mode) -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6YVNTM6JD7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-6YVNTM6JD7');
-    </script>
 
     <style>
         body {
@@ -33,10 +24,10 @@
             background-color: #121212;
             color: #ffffff;
             display: flex;
-            justify-content: center; /* Center main container */
-            align-items: flex-start; /* Align items at the top */
-            height: 100vh; /* Full height */
-            overflow: hidden; /* Hide overflow */
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            overflow: hidden;
         }
 
         #backgroundImage {
@@ -50,220 +41,130 @@
         }
 
         .container {
-            width: 70%; /* Width of the main content */
+            width: 70%;
             max-width: 800px;
             margin: 20px;
-			margin-right: 70px;
             padding: 20px;
             background: rgba(30, 30, 30, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* Sidebar styles */
-        .sidebar {
-            position: fixed; /* Fixed position for the sidebar */
-            right: 20px; /* Distance from the right edge */
-            top: 20px; /* Distance from the top edge */
-            width: 15%; /* Width of the sidebar */
-            max-width: 300px; /* Maximum width */
-            padding: 20px;
-            background: rgba(30, 30, 30, 0.8);
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            height: calc(100% - 40px); /* Full height minus padding */
-            overflow-y: auto; /* Enable vertical scrolling if content overflows */
-        }
-
-        /* Chilanka font applied to the h1 heading */
         .chilanka-regular {
             font-family: "Chilanka", cursive;
-            font-weight: 400;
-            font-style: normal;
-            font-size: 4em; /* Increased font size */
+            font-size: 4em;
+            text-align: center;
         }
 
-        .dropdown, .search-box {
-            margin: 10px 0;
-        }
-
-        .dropdown select, .search-box input[type="button"] {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        select, input[type="button"] {
             width: 100%;
-            box-sizing: border-box;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            border-radius: 4px;
         }
 
-        .search-box input[type="button"] {
+        input[type="button"] {
             background-color: #DC2324;
             color: white;
             border: none;
-            cursor: pointer;
-        }
-
-        .search-box input[type="button"]:hover {
-            background-color: #DC2324;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
             margin-top: 20px;
+            border-collapse: collapse;
             display: none;
         }
 
-        table, th, td {
+        th, td {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: center;
         }
 
-        .centered-title {
-            text-align: center;
-        }
-
-        .error {
-            color: red;
-            text-align: center;
-        }
-
-        /* News feed styles */
-        .news-feed {
-            margin-top: 20px;
-        }
-
         @media (max-width: 600px) {
             .chilanka-regular {
-                font-size: 2em; /* Smaller font for mobile */
-            }
-            .dropdown select, .search-box input[type="button"] {
-                font-size: 14px;
-            }
-            table, th, td {
-                padding: 8px;
-            }
-            .sidebar {
-                width: 100%; /* Full width for mobile */
-                margin: 0;
-                padding: 10px;
-                position: relative; /* Change to relative for mobile */
-                height: auto; /* Reset height */
+                font-size: 2em;
             }
         }
     </style>
 </head>
 <body>
 
-<img id="backgroundImage" src="Background.PNG" alt="Background Image">
+<img id="backgroundImage" src="Background.png" alt="Background Image">
 
 <div class="container">
-    <h1 class="centered-title chilanka-regular">ഹൃദയസ്പർശം</h1>
+    <h1 class="chilanka-regular">ഹൃദയസ്പർശം</h1>
 
-    <div class="dropdown">
-        <select id="options" required>
-            <option value="" disabled selected>Select a Blood Group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-        </select>
-        <div class="search-box">
-            <input type="button" value="Search" onclick="searchBloodGroup()">
-        </div>
-    </div>
+    <select id="options" required>
+        <option value="" disabled selected>Select a Blood Group</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+    </select>
 
-    <div id="errorMessage" class="error"></div>
+    <input type="button" value="Search" onclick="searchBloodGroup()">
 
-    <!-- Table to display Excel data -->
     <table id="excelTable">
-        <thead>
-            <tr></tr>
-        </thead>
+        <thead><tr></tr></thead>
         <tbody></tbody>
     </table>
-</div>
 
-<div class="sidebar">
-    <button onclick="window.location.href='dataform.html'" style="width: 100%; padding: 10px; background-color: #DC2324; color: white; border: none; border-radius: 4px; cursor: pointer;">Add New Donor</button>
-    
-    <div class="news-feed">
-        <h2 align="center">News Feed</h2>
-        <p>Stay updated with the latest information!</p>
-        <ul>
-           
-        </ul>
-    </div>
+    <div id="errorMessage" style="color: red;"></div>
 </div>
 
 <script>
-    const excelFiles = {
-        "A+": "APositive.xlsx",
-        "A-": "ANegative.xlsx",
-        "B+": "BPositive.xlsx",
-        "B-": "BNegative.xlsx",
-        "AB+": "ABPositive.xlsx",
-        "AB-": "ABNegative.xlsx",
-        "O+": "OPositive.xlsx",
-        "O-": "ONegative.xlsx"
-    };
-
     const firebaseConfig = {
         apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
         authDomain: "hridyasparsham-75cc9.firebaseapp.com",
         projectId: "hridyasparsham-75cc9",
-        storageBucket: "hridyasparsham-75cc9",
+        storageBucket: "hridyasparsham-75cc9.appspot.com",
         messagingSenderId: "519026690500",
         appId: "YOUR_APP_ID"
     };
 
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(user => {
         if (!user) {
-            localStorage.removeItem('isLoggedIn'); // Clear any stored session
-            window.location.href = "index.html"; // Redirect to login page if not authenticated
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = "index.html";
         } else {
-            localStorage.setItem('isLoggedIn', 'true'); // Set session on successful login
+            localStorage.setItem('isLoggedIn', 'true');
         }
     });
 
-    // Check for manual URL entry
     window.onload = function() {
         if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = "index.html"; // Redirect if not logged in
+            window.location.href = "index.html";
         }
     };
 
     function loadExcel(selectedValue) {
-        const filePath = excelFiles[selectedValue];
+        const filePath = `${selectedValue.replace('+', 'Positive').replace('-', 'Negative')}.xlsx`;
 
-        if (filePath) {
-            fetch(filePath)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Failed to load file: ${response.statusText}`);
-                    }
-                    return response.arrayBuffer();
-                })
-                .then(data => {
-                    const workbook = XLSX.read(data);
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-                    displayTable(jsonData);
-                })
-                .catch(error => {
-                    document.getElementById('errorMessage').innerText = 'Error loading data. Please try again later.';
-                });
-        } else {
-            document.getElementById('errorMessage').innerText = 'Invalid blood group selected.';
-        }
+        fetch(filePath)
+            .then(response => {
+                if (!response.ok) throw new Error(`Failed to load ${filePath}`);
+                return response.arrayBuffer();
+            })
+            .then(data => {
+                const workbook = XLSX.read(data);
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                displayTable(jsonData);
+            })
+            .catch(error => {
+                document.getElementById('errorMessage').innerText = 'Error loading data. Please try again later.';
+                console.error(error);
+            });
     }
 
     function displayTable(data) {
@@ -273,31 +174,21 @@
         tableHeader.innerHTML = '';
         tableBody.innerHTML = '';
 
-        const headers = data[0];
-        headers.forEach(header => {
+        data[0].forEach(header => {
             const th = document.createElement('th');
             th.innerText = header;
             tableHeader.appendChild(th);
         });
 
-        for (let i = 1; i < data.length; i++) {
-            const row = document.createElement('tr');
-            data[i].forEach(cell => {
+        data.slice(1).forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
                 const td = document.createElement('td');
-                if (/^\d{10}$/.test(cell)) {
-                    const phoneLink = document.createElement('a');
-                    phoneLink.href = `tel:${cell}`;
-                    phoneLink.innerText = cell;
-                    phoneLink.style.color = "#FFFFFF";
-                    phoneLink.style.textDecoration = "none";
-                    td.appendChild(phoneLink);
-                } else {
-                    td.innerText = cell;
-                }
-                row.appendChild(td);
+                td.innerText = cell;
+                tr.appendChild(td);
             });
-            tableBody.appendChild(row);
-        }
+            tableBody.appendChild(tr);
+        });
 
         document.getElementById('excelTable').style.display = 'table';
     }
