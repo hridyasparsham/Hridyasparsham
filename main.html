@@ -24,10 +24,10 @@
             background-color: #121212;
             color: #ffffff;
             display: flex;
-            justify-content: center; /* Center main container */
-            align-items: flex-start; /* Align items at the top */
-            height: 100vh; /* Full height */
-            overflow: auto; /* Hide overflow for body */
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            overflow: auto;
         }
 
         #backgroundImage {
@@ -41,22 +41,20 @@
         }
 
         .container {
-            width: 70%; /* Width of the main content */
+            width: 70%;
             max-width: 800px;
             margin: 20px;
             padding: 20px;
             background: rgba(30, 30, 30, 0.8);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            text-align: center; /* Center text within the container */
+            text-align: center;
         }
 
-        /* Chilanka font applied to the h1 heading */
         .chilanka-regular {
             font-family: "Chilanka", cursive;
             font-weight: 400;
-            font-style: normal;
-            font-size: 4em; /* Increased font size */
+            font-size: 4em;
         }
 
         .dropdown, .search-box {
@@ -79,18 +77,14 @@
             cursor: pointer;
         }
 
-        .search-box input[type="button"]:hover {
-            background-color: #DC2324;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            display: none; /* Initially hidden */
+            display: none;
         }
 
-        table, th, td {
+        th, td {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: center;
@@ -103,16 +97,10 @@
 
         @media (max-width: 600px) {
             .chilanka-regular {
-                font-size: 2em; /* Smaller font for mobile */
-            }
-            .dropdown select, .search-box input[type="button"] {
-                font-size: 14px;
-            }
-            table, th, td {
-                padding: 8px;
+                font-size: 2em;
             }
             .container {
-                width: 90%; /* Full width for mobile */
+                width: 90%;
             }
         }
     </style>
@@ -143,11 +131,8 @@
 
     <div id="errorMessage" class="error"></div>
 
-    <!-- Table to display Excel data -->
     <table id="excelTable">
-        <thead>
-            <tr></tr>
-        </thead>
+        <thead><tr></tr></thead>
         <tbody></tbody>
     </table>
 </div>
@@ -178,17 +163,16 @@
 
     auth.onAuthStateChanged((user) => {
         if (!user) {
-            localStorage.removeItem('isLoggedIn'); // Clear any stored session
-            window.location.href = "index.html"; // Redirect to login page if not authenticated
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = "index.html";
         } else {
-            localStorage.setItem('isLoggedIn', 'true'); // Set session on successful login
+            localStorage.setItem('isLoggedIn', 'true');
         }
     });
 
-    // Check for manual URL entry
     window.onload = function() {
         if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = "index.html"; // Redirect if not logged in
+            window.location.href = "index.html";
         }
     };
 
@@ -197,24 +181,17 @@
 
         if (filePath) {
             fetch(filePath)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Failed to load file: ${response.statusText}`);
-                    }
-                    return response.arrayBuffer(); // Ensure we're returning an ArrayBuffer
-                })
+                .then(response => response.arrayBuffer())
                 .then(data => {
-                    const workbook = XLSX.read(data, { type: 'array' }); // Ensure type is set correctly
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
                     displayTable(jsonData);
                 })
                 .catch(error => {
-                    document.getElementById('errorMessage').innerText = 'Error loading data. Please try again later.';
-                    console.error(error); // Log the error for debugging
+                    document.getElementById('errorMessage').innerText = 'Error loading data.';
+                    console.error(error);
                 });
-        } else {
-            document.getElementById('errorMessage').innerText = 'Invalid blood group selected.';
         }
     }
 
@@ -225,33 +202,29 @@
         tableHeader.innerHTML = '';
         tableBody.innerHTML = '';
 
-        const headers = data[0];
-        headers.forEach(header => {
+        data[0].forEach(header => {
             const th = document.createElement('th');
             th.innerText = header;
             tableHeader.appendChild(th);
         });
 
-        for (let i = 1; i < data.length; i++) {
-            const row = document.createElement('tr');
-            data[i].forEach(cell => {
-                const td = document.createElement('td');
-                if (/^\d{10}$/.test(cell)) {
-                    const phoneLink = document.createElement('a');
-                    phoneLink.href = `tel:${cell}`;
-                    phoneLink.innerText = cell;
-                    phoneLink.style.color = "#FFFFFF";
-                    phoneLink.style.textDecoration = "none";
-                    td.appendChild(phoneLink);
-                } else {
-                    td.innerText = cell;
-                }
-                row.appendChild(td);
-            });
-            tableBody.appendChild(row);
-        }
+        data.slice(1).forEach((row, index) => {
+            const tr = document.createElement('tr');
 
-        document.getElementById('excelTable').style.display = 'table'; // Show the table after data is loaded
+            const serialCell = document.createElement('td');
+            serialCell.innerText = index + 1;
+            tr.appendChild(serialCell);
+
+            row.forEach(cell => {
+                const td = document.createElement('td');
+                td.innerText = cell || '';
+                tr.appendChild(td);
+            });
+
+            tableBody.appendChild(tr);
+        });
+
+        document.getElementById('excelTable').style.display = 'table';
     }
 
     function searchBloodGroup() {
