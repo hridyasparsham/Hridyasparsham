@@ -208,19 +208,25 @@
             tableHeader.appendChild(th);
         });
 
-        data.slice(1).forEach((row, index) => {
+        const sortedData = data.slice(1).sort((a, b) => {
+            const batchA = a[3]?.toString() || ''; // 4th column (Batch)
+            const batchB = b[3]?.toString() || '';
+
+            const isNumA = /^\d/.test(batchA);
+            const isNumB = /^\d/.test(batchB);
+
+            if (isNumA && !isNumB) return -1;
+            if (!isNumA && isNumB) return 1;
+            return batchA.localeCompare(batchB);
+        });
+
+        sortedData.forEach(row => {
             const tr = document.createElement('tr');
-
-            const serialCell = document.createElement('td');
-            serialCell.innerText = index + 1;
-            tr.appendChild(serialCell);
-
             row.forEach(cell => {
                 const td = document.createElement('td');
                 td.innerText = cell || '';
                 tr.appendChild(td);
             });
-
             tableBody.appendChild(tr);
         });
 
