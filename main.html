@@ -225,6 +225,7 @@
             tableHeader.appendChild(th);
         });
 
+<<<<<<< HEAD
         const sortedData = data.slice(1).sort((a, b) => {
             const batchA = a[3]?.toString() || '';
             const batchB = b[3]?.toString() || '';
@@ -240,6 +241,16 @@
         sortedData.forEach(row => {
             const tr = document.createElement('tr');
             row.forEach((cell, index) => {
+=======
+        data.slice(1).forEach((row, index) => {
+            const tr = document.createElement('tr');
+
+            const serialCell = document.createElement('td');
+            serialCell.innerText = index + 1;
+            tr.appendChild(serialCell);
+
+            row.forEach(cell => {
+>>>>>>> parent of d7f982b (Update main.html)
                 const td = document.createElement('td');
                 if (index === 1 && /^[+]?\d{10}$/.test(cell)) { // Assuming phone numbers are in column 2 (index 1)
                     const anchor = document.createElement('a');
@@ -251,6 +262,7 @@
                 }
                 tr.appendChild(td);
             });
+
             tableBody.appendChild(tr);
         });
 
