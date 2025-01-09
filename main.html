@@ -3,54 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Group Search</title>
+    <title>Hridayasparsham</title>
 
-    <!-- Include XLSX library -->
+    <!-- Google Fonts Embed for Chilanka -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            background-color: #121212;
+            color: #ffffff;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             height: 100vh;
+            overflow: auto;
+        }
+
+        #backgroundImage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
         }
 
         .container {
-            width: 80%;
+            width: 70%;
             max-width: 800px;
-            background: #ffffff;
+            margin: 20px;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             text-align: center;
-            margin-bottom: 20px;
         }
 
-        select {
-            width: 100%;
+        .chilanka-regular {
+            font-family: "Chilanka", cursive;
+            font-weight: 400;
+            font-size: 4em;
+        }
+
+        .dropdown, .search-box {
+            margin: 10px 0;
+        }
+
+        .dropdown select, .search-box input[type="button"] {
             padding: 10px;
-            margin-bottom: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
+        .search-box input[type="button"] {
+            background-color: #DC2324;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
         }
 
@@ -64,25 +86,45 @@
         th, td {
             border: 1px solid #ccc;
             padding: 10px;
-            text-align: left;
+            text-align: center;
         }
 
-        th {
-            background-color: #f8f8f8;
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
         .error {
             color: red;
             text-align: center;
-            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .chilanka-regular {
+                font-size: 2em;
+            }
+
+            .container {
+                width: 90%;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Blood Group Search</h1>
 
-        <select id="bloodGroupSelector">
+<img id="backgroundImage" src="Background.PNG" alt="Background Image">
+
+<div class="container">
+    <h1 class="chilanka-regular">ഹൃദയസ്പർശം</h1>
+
+    <div class="dropdown">
+        <select id="options" required>
             <option value="" disabled selected>Select a Blood Group</option>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
@@ -93,44 +135,62 @@
             <option value="O+">O+</option>
             <option value="O-">O-</option>
         </select>
-
-        <button onclick="searchBloodGroup()">Search</button>
-
-        <div id="error" class="error"></div>
-
-        <table id="resultsTable">
-            <thead>
-                <tr></tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="search-box">
+            <input type="button" value="Search" onclick="searchBloodGroup()">
+        </div>
     </div>
 
-    <script>
-        const excelFiles = {
-            "A+": "APositive.xlsx",
-            "A-": "ANegative.xlsx",
-            "B+": "BPositive.xlsx",
-            "B-": "BNegative.xlsx",
-            "AB+": "ABPositive.xlsx",
-            "AB-": "ABNegative.xlsx",
-            "O+": "OPositive.xlsx",
-            "O-": "ONegative.xlsx",
-        };
+    <div id="errorMessage" class="error"></div>
 
-        function searchBloodGroup() {
-            const bloodGroup = document.getElementById('bloodGroupSelector').value;
+    <table id="excelTable">
+        <thead><tr></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
 
-            if (!bloodGroup) {
-                document.getElementById('error').innerText = 'Please select a blood group.';
-                return;
-            }
+<script>
+    const excelFiles = {
+        "A+": "APositive.xlsx",
+        "A-": "ANegative.xlsx",
+        "B+": "BPositive.xlsx",
+        "B-": "BNegative.xlsx",
+        "AB+": "ABPositive.xlsx",
+        "AB-": "ABNegative.xlsx",
+        "O+": "OPositive.xlsx",
+        "O-": "ONegative.xlsx"
+    };
 
-            document.getElementById('error').innerText = '';
-            loadExcel(excelFiles[bloodGroup]);
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
+        authDomain: "hridyasparsham-75cc9.firebaseapp.com",
+        projectId: "hridyasparsham-75cc9",
+        storageBucket: "hridyasparsham-75cc9",
+        messagingSenderId: "519026690500",
+        appId: "YOUR_APP_ID"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = "index.html";
+        } else {
+            localStorage.setItem('isLoggedIn', 'true');
         }
+    });
 
-        function loadExcel(filePath) {
+    window.onload = function() {
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = "index.html";
+        }
+    };
+
+    function loadExcel(selectedValue) {
+        const filePath = excelFiles[selectedValue];
+
+        if (filePath) {
             fetch(filePath)
                 .then(response => response.arrayBuffer())
                 .then(data => {
@@ -140,51 +200,67 @@
                     displayTable(jsonData);
                 })
                 .catch(error => {
-                    document.getElementById('error').innerText = 'Error loading the Excel file.';
+                    document.getElementById('errorMessage').innerText = 'Error loading data.';
                     console.error(error);
                 });
         }
+    }
 
-        function displayTable(data) {
-            const table = document.getElementById('resultsTable');
-            const thead = table.querySelector('thead tr');
-            const tbody = table.querySelector('tbody');
+    function displayTable(data) {
+        const tableHeader = document.querySelector("#excelTable thead tr");
+        const tableBody = document.querySelector("#excelTable tbody");
 
-            thead.innerHTML = '';
-            tbody.innerHTML = '';
+        tableHeader.innerHTML = '';
+        tableBody.innerHTML = '';
 
-            // Populate headers
-            data[0].forEach(header => {
-                const th = document.createElement('th');
-                th.innerText = header;
-                thead.appendChild(th);
+        data[0].forEach(header => {
+            const th = document.createElement('th');
+            th.innerText = header;
+            tableHeader.appendChild(th);
+        });
+
+        const sortedData = data.slice(1).sort((a, b) => {
+            const batchA = a[3]?.toString() || '';
+            const batchB = b[3]?.toString() || '';
+
+            const isNumA = /^\d/.test(batchA);
+            const isNumB = /^\d/.test(batchB);
+
+            if (isNumA && !isNumB) return -1;
+            if (!isNumA && isNumB) return 1;
+            return batchA.localeCompare(batchB);
+        });
+
+        sortedData.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach((cell, index) => {
+                const td = document.createElement('td');
+                if (index === 1 && /^[+]?[0-9]+$/.test(cell)) {
+                    const anchor = document.createElement('a');
+                    anchor.href = `tel:${cell}`;
+                    anchor.innerText = cell;
+                    td.appendChild(anchor);
+                } else {
+                    td.innerText = cell || '';
+                }
+                tr.appendChild(td);
             });
+            tableBody.appendChild(tr);
+        });
 
-            // Populate rows
-            data.slice(1).forEach(row => {
-                const tr = document.createElement('tr');
+        document.getElementById('excelTable').style.display = 'table';
+    }
 
-                row.forEach((cell, index) => {
-                    const td = document.createElement('td');
-
-                    // If it's the Phone Number column, make it clickable
-                    if (data[0][index].toLowerCase().includes('phone')) {
-                        const anchor = document.createElement('a');
-                        anchor.href = `tel:${cell}`;
-                        anchor.innerText = cell;
-                        td.appendChild(anchor);
-                    } else {
-                        td.innerText = cell;
-                    }
-
-                    tr.appendChild(td);
-                });
-
-                tbody.appendChild(tr);
-            });
-
-            table.style.display = 'table';
+    function searchBloodGroup() {
+        const selectedValue = document.getElementById("options").value;
+        if (!selectedValue) {
+            document.getElementById('errorMessage').innerText = 'Please select a blood group.';
+            return;
         }
-    </script>
+        document.getElementById('errorMessage').innerText = '';
+        loadExcel(selectedValue);
+    }
+</script>
+
 </body>
 </html>
