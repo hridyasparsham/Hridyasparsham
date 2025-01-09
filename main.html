@@ -99,8 +99,15 @@
             .chilanka-regular {
                 font-size: 2em;
             }
+
             .container {
                 width: 90%;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
             }
         }
     </style>
@@ -209,7 +216,7 @@
         });
 
         const sortedData = data.slice(1).sort((a, b) => {
-            const batchA = a[3]?.toString() || ''; // 4th column (Batch)
+            const batchA = a[3]?.toString() || '';
             const batchB = b[3]?.toString() || '';
 
             const isNumA = /^\d/.test(batchA);
@@ -222,9 +229,16 @@
 
         sortedData.forEach(row => {
             const tr = document.createElement('tr');
-            row.forEach(cell => {
+            row.forEach((cell, index) => {
                 const td = document.createElement('td');
-                td.innerText = cell || '';
+                if (index === 1 && /^[+]?\d+$/.test(cell)) { // Assuming phone numbers are in column 2 (index 1)
+                    const anchor = document.createElement('a');
+                    anchor.href = `tel:${cell}`;
+                    anchor.innerText = cell;
+                    td.appendChild(anchor);
+                } else {
+                    td.innerText = cell || '';
+                }
                 tr.appendChild(td);
             });
             tableBody.appendChild(tr);
@@ -235,6 +249,11 @@
 
     function searchBloodGroup() {
         const selectedValue = document.getElementById("options").value;
+        if (!selectedValue) {
+            document.getElementById('errorMessage').innerText = 'Please select a blood group.';
+            return;
+        }
+        document.getElementById('errorMessage').innerText = '';
         loadExcel(selectedValue);
     }
 </script>
