@@ -209,12 +209,14 @@
         tableHeader.innerHTML = '';
         tableBody.innerHTML = '';
 
+        // Populate the table headers
         data[0].forEach(header => {
             const th = document.createElement('th');
             th.innerText = header;
             tableHeader.appendChild(th);
         });
 
+        // Sort and populate the table rows
         const sortedData = data.slice(1).sort((a, b) => {
             const batchA = a[3]?.toString() || '';
             const batchB = b[3]?.toString() || '';
@@ -231,14 +233,19 @@
             const tr = document.createElement('tr');
             row.forEach((cell, index) => {
                 const td = document.createElement('td');
-                if (index === 1 && /^[+]?\d+$/.test(cell)) { // Assuming phone numbers are in column 2 (index 1)
+
+                // Make 10-digit phone numbers clickable
+                if (index === 1 && /^\d{10}$/.test(cell)) { // Assuming phone numbers are in column 2 (index 1)
                     const anchor = document.createElement('a');
                     anchor.href = `tel:${cell}`;
                     anchor.innerText = cell;
+                    anchor.style.color = '#DC2324'; // Optional: Style the phone number
+                    anchor.style.textDecoration = 'none'; // Optional: Remove underline
                     td.appendChild(anchor);
                 } else {
                     td.innerText = cell || '';
                 }
+
                 tr.appendChild(td);
             });
             tableBody.appendChild(tr);
