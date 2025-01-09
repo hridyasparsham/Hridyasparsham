@@ -11,9 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
+    <!-- Firebase SDKs as Modules -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
     <style>
@@ -90,15 +90,6 @@
             text-align: center;
         }
 
-        a {
-            color: #DC2324;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
         .error {
             color: red;
             text-align: center;
@@ -153,7 +144,42 @@
     </table>
 </div>
 
-<script>
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js';
+
+    // Firebase config
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
+        authDomain: "hridyasparsham-75cc9.firebaseapp.com",
+        projectId: "hridyasparsham-75cc9",
+        storageBucket: "hridyasparsham-75cc9",
+        messagingSenderId: "519026690500",
+        appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Authentication state change
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = "index.html";
+        } else {
+            localStorage.setItem('isLoggedIn', 'true');
+        }
+    });
+
+    // Redirect if not logged in
+    window.onload = function() {
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = "index.html";
+        }
+    };
+
+    // Blood group data file mapping
     const excelFiles = {
         "A+": "APositive.xlsx",
         "A-": "ANegative.xlsx",
@@ -165,33 +191,7 @@
         "O-": "ONegative.xlsx"
     };
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
-        authDomain: "hridyasparsham-75cc9.firebaseapp.com",
-        projectId: "hridyasparsham-75cc9",
-        storageBucket: "hridyasparsham-75cc9",
-        messagingSenderId: "519026690500",
-        appId: "YOUR_APP_ID"
-    };
-
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    auth.onAuthStateChanged((user) => {
-        if (!user) {
-            localStorage.removeItem('isLoggedIn');
-            window.location.href = "index.html";
-        } else {
-            localStorage.setItem('isLoggedIn', 'true');
-        }
-    });
-
-    window.onload = function() {
-        if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = "index.html";
-        }
-    };
-
+    // Load and display excel file
     function loadExcel(selectedValue) {
         const filePath = excelFiles[selectedValue];
 
@@ -211,6 +211,7 @@
         }
     }
 
+    // Display data in table format
     function displayTable(data) {
         const tableHeader = document.querySelector("#excelTable thead tr");
         const tableBody = document.querySelector("#excelTable tbody");
@@ -240,8 +241,7 @@
             const tr = document.createElement('tr');
             row.forEach((cell, index) => {
                 const td = document.createElement('td');
-
-                if (index === 1 && /^\d{10}$/.test(cell)) { // Checking if the cell contains a valid 10-digit phone number
+                if (index === 1 && /^[+]?\d{10}$/.test(cell)) { // Assuming phone numbers are in column 2 (index 1)
                     const anchor = document.createElement('a');
                     anchor.href = `tel:${cell}`;
                     anchor.innerText = cell;
@@ -249,7 +249,6 @@
                 } else {
                     td.innerText = cell || '';
                 }
-
                 tr.appendChild(td);
             });
             tableBody.appendChild(tr);
@@ -258,6 +257,7 @@
         document.getElementById('excelTable').style.display = 'table';
     }
 
+    // Search button handler
     function searchBloodGroup() {
         const selectedValue = document.getElementById("options").value;
         if (!selectedValue) {
