@@ -2,19 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hridayasparsham</title>
 
     <!-- Google Fonts Embed for Chilanka -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
 
-    <!-- Firebase SDKs as Modules -->
-    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <!-- Firebase SDKs -->
+    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
     <style>
         body {
@@ -53,7 +50,6 @@
 
         .chilanka-regular {
             font-family: "Chilanka", cursive;
-            font-weight: 400;
             font-size: 4em;
         }
 
@@ -67,7 +63,6 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             width: 100%;
-            box-sizing: border-box;
         }
 
         .search-box input[type="button"] {
@@ -113,173 +108,148 @@
     </style>
 </head>
 <body>
+    <img id="backgroundImage" src="Background.PNG" alt="Background Image">
 
-<img id="backgroundImage" src="Background.PNG" alt="Background Image">
+    <div class="container">
+        <h1 class="chilanka-regular">ഹൃദയസ്പർശം</h1>
 
-<div class="container">
-    <h1 class="chilanka-regular">ഹൃദയസ്പർശം</h1>
-
-    <div class="dropdown">
-        <select id="options" required>
-            <option value="" disabled selected>Select a Blood Group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-        </select>
-        <div class="search-box">
-            <input type="button" value="Search" onclick="searchBloodGroup()">
+        <div class="dropdown">
+            <select id="options" required>
+                <option value="" disabled selected>Select a Blood Group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
+            <div class="search-box">
+                <input type="button" value="Search" onclick="searchBloodGroup()">
+            </div>
         </div>
+
+        <div id="errorMessage" class="error"></div>
+
+        <table id="excelTable">
+            <thead><tr></tr></thead>
+            <tbody></tbody>
+        </table>
     </div>
 
-    <div id="errorMessage" class="error"></div>
+    <script>
+        const excelFiles = {
+            "A+": "APositive.xlsx",
+            "A-": "ANegative.xlsx",
+            "B+": "BPositive.xlsx",
+            "B-": "BNegative.xlsx",
+            "AB+": "ABPositive.xlsx",
+            "AB-": "ABNegative.xlsx",
+            "O+": "OPositive.xlsx",
+            "O-": "ONegative.xlsx"
+        };
 
-    <table id="excelTable">
-        <thead><tr></tr></thead>
-        <tbody></tbody>
-    </table>
-</div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
+            authDomain: "hridyasparsham-75cc9.firebaseapp.com",
+            projectId: "hridyasparsham-75cc9",
+            storageBucket: "hridyasparsham-75cc9",
+            messagingSenderId: "519026690500",
+            appId: "YOUR_APP_ID"
+        };
 
-<script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js';
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
 
-    // Firebase config
-    const firebaseConfig = {
-        apiKey: "AIzaSyBzupQI9qv5y7JSwMOvm7dRxBvbmzsv0QI",
-        authDomain: "hridyasparsham-75cc9.firebaseapp.com",
-        projectId: "hridyasparsham-75cc9",
-        storageBucket: "hridyasparsham-75cc9",
-        messagingSenderId: "519026690500",
-        appId: "YOUR_APP_ID"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Authentication state change
-    onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            localStorage.removeItem('isLoggedIn');
-            window.location.href = "index.html";
-        } else {
-            localStorage.setItem('isLoggedIn', 'true');
-        }
-    });
-
-    // Redirect if not logged in
-    window.onload = function() {
-        if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = "index.html";
-        }
-    };
-
-    // Blood group data file mapping
-    const excelFiles = {
-        "A+": "APositive.xlsx",
-        "A-": "ANegative.xlsx",
-        "B+": "BPositive.xlsx",
-        "B-": "BNegative.xlsx",
-        "AB+": "ABPositive.xlsx",
-        "AB-": "ABNegative.xlsx",
-        "O+": "OPositive.xlsx",
-        "O-": "ONegative.xlsx"
-    };
-
-    // Load and display excel file
-    function loadExcel(selectedValue) {
-        const filePath = excelFiles[selectedValue];
-
-        if (filePath) {
-            fetch(filePath)
-                .then(response => response.arrayBuffer())
-                .then(data => {
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                    displayTable(jsonData);
-                })
-                .catch(error => {
-                    document.getElementById('errorMessage').innerText = 'Error loading data.';
-                    console.error(error);
-                });
-        }
-    }
-
-    // Display data in table format
-    function displayTable(data) {
-        const tableHeader = document.querySelector("#excelTable thead tr");
-        const tableBody = document.querySelector("#excelTable tbody");
-
-        tableHeader.innerHTML = '';
-        tableBody.innerHTML = '';
-
-        data[0].forEach(header => {
-            const th = document.createElement('th');
-            th.innerText = header;
-            tableHeader.appendChild(th);
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = "index.html";
+            } else {
+                localStorage.setItem('isLoggedIn', 'true');
+            }
         });
 
-<<<<<<< HEAD
-        const sortedData = data.slice(1).sort((a, b) => {
-            const batchA = a[3]?.toString() || '';
-            const batchB = b[3]?.toString() || '';
+        window.onload = function() {
+            if (!localStorage.getItem('isLoggedIn')) {
+                window.location.href = "index.html";
+            }
+        };
 
-            const isNumA = /^\d/.test(batchA);
-            const isNumB = /^\d/.test(batchB);
+        function loadExcel(selectedValue) {
+            const filePath = excelFiles[selectedValue];
 
-            if (isNumA && !isNumB) return -1;
-            if (!isNumA && isNumB) return 1;
-            return batchA.localeCompare(batchB);
-        });
+            if (filePath) {
+                fetch(filePath)
+                    .then(response => response.arrayBuffer())
+                    .then(data => {
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                        displayTable(jsonData);
+                    })
+                    .catch(error => {
+                        document.getElementById('errorMessage').innerText = 'Error loading data.';
+                        console.error(error);
+                    });
+            }
+        }
 
-        sortedData.forEach(row => {
-            const tr = document.createElement('tr');
-            row.forEach((cell, index) => {
-=======
-        data.slice(1).forEach((row, index) => {
-            const tr = document.createElement('tr');
+        function displayTable(data) {
+            const tableHeader = document.querySelector("#excelTable thead tr");
+            const tableBody = document.querySelector("#excelTable tbody");
 
-            const serialCell = document.createElement('td');
-            serialCell.innerText = index + 1;
-            tr.appendChild(serialCell);
+            tableHeader.innerHTML = '';
+            tableBody.innerHTML = '';
 
-            row.forEach(cell => {
->>>>>>> parent of d7f982b (Update main.html)
-                const td = document.createElement('td');
-                if (index === 1 && /^[+]?\d{10}$/.test(cell)) { // Assuming phone numbers are in column 2 (index 1)
-                    const anchor = document.createElement('a');
-                    anchor.href = `tel:${cell}`;
-                    anchor.innerText = cell;
-                    td.appendChild(anchor);
-                } else {
-                    td.innerText = cell || '';
-                }
-                tr.appendChild(td);
+            data[0].forEach(header => {
+                const th = document.createElement('th');
+                th.innerText = header;
+                tableHeader.appendChild(th);
             });
 
-            tableBody.appendChild(tr);
-        });
+            const sortedData = data.slice(1).sort((a, b) => {
+                const batchA = a[3]?.toString() || '';
+                const batchB = b[3]?.toString() || '';
 
-        document.getElementById('excelTable').style.display = 'table';
-    }
+                const isNumA = /^\d/.test(batchA);
+                const isNumB = /^\d/.test(batchB);
 
-    // Search button handler
-    function searchBloodGroup() {
-        const selectedValue = document.getElementById("options").value;
-        if (!selectedValue) {
-            document.getElementById('errorMessage').innerText = 'Please select a blood group.';
-            return;
+                if (isNumA && !isNumB) return -1;
+                if (!isNumA && isNumB) return 1;
+                return batchA.localeCompare(batchB);
+            });
+
+            sortedData.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach((cell, index) => {
+                    const td = document.createElement('td');
+                    if (index === 1 && /^[+]?\d{10}$/.test(cell)) {
+                        const anchor = document.createElement('a');
+                        anchor.href = `tel:${cell}`;
+                        anchor.innerText = cell;
+                        td.appendChild(anchor);
+                    } else {
+                        td.innerText = cell || '';
+                    }
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+
+            document.getElementById('excelTable').style.display = 'table';
         }
-        document.getElementById('errorMessage').innerText = '';
-        loadExcel(selectedValue);
-    }
-</script>
 
+        function searchBloodGroup() {
+            const selectedValue = document.getElementById("options").value;
+            if (!selectedValue) {
+                document.getElementById('errorMessage').innerText = 'Please select a blood group.';
+                return;
+            }
+            document.getElementById('errorMessage').innerText = '';
+            loadExcel(selectedValue);
+        }
+    </script>
 </body>
 </html>
